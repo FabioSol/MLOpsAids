@@ -1,0 +1,31 @@
+version: "3.8"
+
+services:
+  # Postgres service
+  postgres:
+    build: postgres/  # Replace with the relative path to your Postgres Dockerfile
+
+  # API service
+  api:
+    build: app/  # Replace with the relative path to your API Dockerfile
+    ports:
+      - "8080:8080"  # Expose port 8080 from container to host
+    depends_on:
+      - postgres  # Ensure postgres is running before the API
+    environment:
+      - DATABASE_URL=postgresql://aids:aids@postgres:5432/aids  # Replace credentials and database name
+      - MLFLOW_TRACKING_URI=http://mlflow-server:5000  # Adjust port if needed
+    volumes:
+      - ./src:/app/src  # Mount your src directory for code updates
+
+  # Optional: MLflow server (if not using a separate server)
+  mlflow-server:
+    image: mlflow/mlflow-server  # Use official MLflow server image
+    ports:
+      - "5000:5000"  # Expose MLflow tracking server port
+    volumes:
+      - mlflow-data:/mlflow  # Persistent volume for MLflow artifacts (optional)
+
+volumes:
+  # Optional: Persistent volume for MLflow artifacts
+  mlflow-data: {}

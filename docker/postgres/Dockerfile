@@ -5,7 +5,7 @@ VOLUME ["/var/lib/postgresql/data/pgdata"]
 
 ENV POSTGRES_USER = aids
 ENV POSTGRES_DB = aids
-ENV POSTGRES_PASSWORD=aids
+ENV POSTGRES_PASSWORD = aids
 
 EXPOSE 5432
 

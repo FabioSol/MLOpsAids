@@ -11,16 +11,30 @@ services:
     ports:
       - "5432:5432"
     volumes:
-      - ./postgres/init.sql:/docker-entrypoint-initdb.d/init.sql
+      - ./postgres/schema.sql:/docker-entrypoint-initdb.d/init.sql
 
-  # API service
-  api:
-    build: app/  # Replace with the relative path to your API Dockerfile
+  mlflow:
+    image: ghcr.io/mlflow/mlflow:v2.13.1
+    container_name: mlflow
+    environment:
+      ARTIFACT_ROOT: /mlflow/artifacts
+    volumes:
+      - /mlflow_data:/mlflow
     ports:
-      - "8080:8080"
       - "5000:5000"
     depends_on:
-      - postgres  # Ensure postgres is running before the API
+      - postgres
+    command: ["mlflow", "server"]
+  # API service
+  api:
+    build: app/
+    container_name: api
     environment:
-      - DATABASE_URL=postgresql://aids:aids@postgres:5432/aids  # Replace credentials and database name
-      - MLFLOW_TRACKING_URI=http://mlflow-server:5000  # Adjust port if needed
+      DATABASE_URL: postgresql://aids:aids@postgres:5432/aids
+      MLFLOW_TRACKING_URI: http://mlflow-server:5000
+      PYTHONPATH: /app:/app/api:/app/src:/app/AidsModel
+    ports:
+      - "8080:8080"
+    depends_on:
+      - postgres
+      - mlflow

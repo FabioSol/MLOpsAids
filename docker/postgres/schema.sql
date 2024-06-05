@@ -1,4 +1,4 @@
-CREATE TABLE IF NOT EXISTS train_data (
+CREATE TABLE train_data (
     id SERIAL PRIMARY KEY,
     cid INTEGER,
     time_feature INTEGER,
@@ -25,8 +25,7 @@ CREATE TABLE IF NOT EXISTS train_data (
     cd80 INTEGER,
     cd820 INTEGER
 );
-
-CREATE TABLE IF NOT EXISTS predictions (
+CREATE TABLE predictions (
     id SERIAL PRIMARY KEY,
     cid INTEGER,
     time_feature INTEGER,
@@ -51,10 +50,9 @@ CREATE TABLE IF NOT EXISTS predictions (
     cd40 INTEGER,
     cd420 INTEGER,
     cd80 INTEGER,
-    cd820 INTEGER,
+    cd820 INTEGER
 );
-
-CREATE TABLE IF NOT EXISTS new_data (
+CREATE TABLE new_data (
     id SERIAL PRIMARY KEY,
     cid INTEGER,
     time_feature INTEGER,
@@ -79,5 +77,5 @@ CREATE TABLE IF NOT EXISTS new_data (
     cd40 INTEGER,
     cd420 INTEGER,
     cd80 INTEGER,
-    cd820 INTEGER,
+    cd820 INTEGER
 );
